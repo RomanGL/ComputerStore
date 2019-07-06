@@ -4,11 +4,15 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" asp-href-include="/lib/bootstrap/**/*.min.css"/>
+    <link rel="stylesheet" asp-href-include="/lib/font-awesome/css/*.css"/>
     <title>Computer Store</title>
 </head>
 <body>
-    <div class="navbar navbar-dark bg-primary" role="navigation">
-        <a class="navbar-brand" href="#">COMPUTER STORE</a>
+    <div class="navbar navbar-dark bg-primary justify-content-between" role="navigation">
+        <a class="col-1 navbar-brand" href="#">COMPUTER STORE</a>
+        <div class="col-4 text-right">
+            @await Component.InvokeAsync("CartSummary")
+        </div>
     </div>
     <div class="row m-1 p-1">
         <div id="categories" class="col-3">

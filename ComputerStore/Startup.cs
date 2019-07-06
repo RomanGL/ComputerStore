@@ -1,6 +1,7 @@
 ﻿using ComputerStore.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +24,11 @@ namespace ComputerStore
             {
                 options.UseSqlServer(Configuration["Data:ComputerStoreProducts:ConnectionString"]);
             });
+
             services.AddTransient<IProductRepository, EFProductRepository>();
+            services.AddScoped(sp => SessionCart.GetCart(sp));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddMvc();
             services.AddMemoryCache();
             services.AddSession();
