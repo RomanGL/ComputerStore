@@ -1,11 +1,10 @@
 ﻿using ComputerStore.Infrastructure;
 using ComputerStore.Models;
+using ComputerStore.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace ComputerStore.Controllers
 {
@@ -16,6 +15,15 @@ namespace ComputerStore.Controllers
         public CartController(IProductRepository repository)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        }
+
+        public ViewResult Index(string returnUrl)
+        {
+            return View(new CartIndexViewModel
+            {
+                Cart = GetCart(),
+                ReturnUrl = returnUrl
+            });
         }
 
         public RedirectToActionResult AddToCart(int productId, string returnUrl)
