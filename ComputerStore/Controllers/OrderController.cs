@@ -16,6 +16,22 @@ namespace ComputerStore.Controllers
             _cart = cart ?? throw new ArgumentNullException(nameof(cart));
         }
 
+        public ViewResult List() => View(_orderRepository.Orders
+            .Where(o => !o.Shipped)
+            .OrderBy(o => o.OrderId));
+
+        public IActionResult MarkShipped(int orderId)
+        {
+            var order = _orderRepository.Orders.FirstOrDefault(o => o.OrderId == orderId);
+            if (order != null)
+            {
+                order.Shipped = true;
+                _orderRepository.SaveOrder(order);
+            }
+
+            return RedirectToAction(nameof(List));
+        }
+
         [HttpGet]
         public ViewResult Checkout() => View(new Order());
 
