@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Linq;
 
 namespace ComputerStore.Models
@@ -13,5 +14,19 @@ namespace ComputerStore.Models
         }
 
         public IQueryable<Product> Products => _context.Products;
+
+        public void SaveProduct(Product product)
+        {
+            if (product.ProductId == 0)
+            {
+                _context.Products.Add(product);
+            }
+            else
+            {
+                _context.Products.Attach(product).State = EntityState.Modified;
+            }
+
+            _context.SaveChanges();
+        }
     }
 }
