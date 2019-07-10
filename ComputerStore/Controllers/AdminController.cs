@@ -10,6 +10,7 @@ namespace ComputerStore.Controllers
 {
     public class AdminController : Controller
     {
+        private const string TempDataMessageKey = "message";
         private readonly IProductRepository _productRepository;
 
         public AdminController(IProductRepository productRepository)
@@ -29,7 +30,7 @@ namespace ComputerStore.Controllers
             if (ModelState.IsValid)
             {
                 _productRepository.SaveProduct(product);
-                TempData["message"] = $"{product.Name} has been saved";
+                TempData[TempDataMessageKey] = $"{product.Name} has been saved";
                 return RedirectToAction(nameof(Index));
             }
             else
@@ -40,5 +41,17 @@ namespace ComputerStore.Controllers
 
         [HttpGet]
         public ViewResult Create() => View(nameof(Edit), new Product());
+
+        [HttpPost]
+        public IActionResult Delete(int productId)
+        {
+            var deletedProduct = _productRepository.DeleteProduct(productId);
+            if (deletedProduct != null)
+            {
+                TempData[TempDataMessageKey] = $"{deletedProduct.Name} was deleted";
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

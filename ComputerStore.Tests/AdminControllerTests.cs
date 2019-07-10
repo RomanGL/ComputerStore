@@ -113,6 +113,25 @@ namespace ComputerStore.Tests
             Assert.IsType<ViewResult>(result);
         }
 
+        [Fact]
+        public void Can_Delete_Valid_Products()
+        {
+            var mock = new Mock<IProductRepository>();
+            var product = new Product { ProductId = 2, Name = "To delete" };
+
+            mock.Setup(m => m.Products).Returns(new[]
+            {
+                new Product { ProductId = 1, Name = "P1" },
+                product,
+                new Product { ProductId = 3, Name = "P3" }
+            }.AsQueryable());
+
+            var controller = new AdminController(mock.Object);
+            controller.Delete(product.ProductId);
+
+            mock.Verify(m => m.DeleteProduct(product.ProductId), Times.Once);
+        }
+
         private static T GetViewModel<T>(IActionResult result) where T : class
             => (result as ViewResult)?.ViewData.Model as T;
     }
