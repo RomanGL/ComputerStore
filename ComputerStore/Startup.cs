@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,14 @@ namespace ComputerStore
             {
                 options.UseSqlServer(Configuration["Data:ComputerStoreProducts:ConnectionString"]);
             });
+            services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                options.UseSqlServer(Configuration["Data:ComputerStoreIdentity:ConnectionString"]);
+            });
+
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
             services.AddTransient<IProductRepository, EFProductRepository>();
             services.AddTransient<IOrderRepository, EFOrderRepository>();
@@ -43,6 +52,7 @@ namespace ComputerStore
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseSession();
+            app.UseAuthentication();
             app.UseMvc(routes => 
             {
                 routes.MapRoute(
@@ -69,6 +79,7 @@ namespace ComputerStore
             });
 
             SeedData.EnsurePopulated(app);
+            IdentitySeedData.EnsurePopulatedAsync(app).GetAwaiter().GetResult();
         }
     }
 }

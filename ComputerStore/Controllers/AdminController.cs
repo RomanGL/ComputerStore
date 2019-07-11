@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using ComputerStore.Models;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerStore.Controllers
 {
+    [Authorize]
     public class AdminController : Controller
     {
         private const string TempDataMessageKey = "message";

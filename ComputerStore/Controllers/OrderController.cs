@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using ComputerStore.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ComputerStore.Controllers
@@ -16,10 +17,13 @@ namespace ComputerStore.Controllers
             _cart = cart ?? throw new ArgumentNullException(nameof(cart));
         }
 
+        [Authorize]
         public ViewResult List() => View(_orderRepository.Orders
             .Where(o => !o.Shipped)
             .OrderBy(o => o.OrderId));
 
+        [HttpPost]
+        [Authorize]
         public IActionResult MarkShipped(int orderId)
         {
             var order = _orderRepository.Orders.FirstOrDefault(o => o.OrderId == orderId);

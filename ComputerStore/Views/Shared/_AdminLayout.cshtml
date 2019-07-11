@@ -14,7 +14,11 @@
 </head>
 <body>
     <div class="navbar navbar-dark bg-primary" role="navigation">
-        <a class="col-1 navbar-brand" href="#">Admin panel - @ViewBag.Title</a>
+        <a class="col navbar-brand" href="#">Admin panel - @ViewBag.Title</a>
+        <div class="col-2">
+            <a class="btn btn-sm btn-primary"
+               asp-action="Logout" asp-controller="Account">Log Out</a>
+        </div>
     </div>
     @if (TempData["message"] != null)
     {
